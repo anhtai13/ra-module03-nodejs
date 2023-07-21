@@ -1,16 +1,16 @@
 const http = require("http");
+const fs = require("fs");
 
-const server = http.createServer((request, response) => {
-  response.writeHead(200, {
-    "Content-Type": "text/html, charset=utf-8",
+http
+  .createServer((request, response) => {
+    response.writeHead(200, { "content-Type": "text/html; charset=utf-8" });
+
+    const template = fs.readFileSync("template.html", "utf-8");
+    const html = template.replace(/{{message}}/g, msg);
+    response.write(html);
+
+    response.end();
+  })
+  .listen(8080, "127.0.0.1", () => {
+    console.log("Server started");
   });
-
- 
-  response.write("<h1>Hello world</h1>");
-
-  response.end();
-});
-
-server.listen(8080, "127.0.0.1", () => {
-  console.log("Máy chủ đang chạy. Vui lòng truy cấp http://127.0.0.1:8080/");
-});
