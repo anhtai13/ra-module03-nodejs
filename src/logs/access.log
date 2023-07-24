@@ -1,0 +1,8 @@
+::1 - - [24/Jul/2023:12:59:41 +0000] "GET /users HTTP/1.1" 200 12 "-" "PostmanRuntime/7.32.3"
+::1 - - [24/Jul/2023:13:01:41 +0000] "POST /users HTTP/1.1" 200 64 "-" "PostmanRuntime/7.32.3"
+::1 - - [24/Jul/2023:13:08:22 +0000] "POST /users HTTP/1.1" 200 64 "-" "PostmanRuntime/7.32.3"
+::1 - - [24/Jul/2023:13:08:59 +0000] "POST /users HTTP/1.1" 200 64 "-" "PostmanRuntime/7.32.3"
+::1 - - [24/Jul/2023:13:09:05 +0000] "GET /users HTTP/1.1" 200 27 "-" "PostmanRuntime/7.32.3"
+::1 - - [24/Jul/2023:13:17:05 +0000] "GET /users HTTP/1.1" 200 27 "-" "PostmanRuntime/7.32.3"
+::1 - - [24/Jul/2023:13:17:45 +0000] "GET /users HTTP/1.1" 200 27 "-" "PostmanRuntime/7.32.3"
+::1 - - [24/Jul/2023:13:18:13 +0000] "GET /users/1 HTTP/1.1" 200 10 "-" "PostmanRuntime/7.32.3"
