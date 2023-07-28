@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+  </head>
+  <body>
+    <div><%= title %></div>
+    <a href="todolists/new">Thêm mới</a>
+
+    <table>
+      <thead>
+        <th>ID</th>
+        <th>Công việc cần làm</th>
+        <th>action</th>
+      </thead>
+      <tbody>
+        <% for (let todo of todolists) {%>
+        <tr>
+          <td><%= todo.id %></td>
+          <td><%= todo.todo %></td>
+          <td>
+            <a href="/todolists/<%= todo.id %>/edit">Sửa</a>
+            <form
+              action="/todolists/<%= todo.id %>?_method=DELETE"
+              method="POST"
+            >
+              <button type="submit">Xóa</button>
+            </form>
+          </td>
+        </tr>
+        <%}%>
+      </tbody>
+    </table>
+  </body>
+</html>

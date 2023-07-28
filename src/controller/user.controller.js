@@ -1,4 +1,4 @@
-import getNextId from "../utilities/getNetId.js";
+import getNextId from "../utilities/getNextId.js";
 
 let users = [
   {

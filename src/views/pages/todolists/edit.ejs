@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+  </head>
+  <body>
+    <h1>Thêm mới người dùng</h1>
+    <a href="/todolists">Trở về trang danh sách</a>
+    <form method="POST" action="/todolists/<%= todo.id %>?_method=PUT">
+      <input
+        type="text"
+        name="todo"
+        placeholder="Công việc cần làm"
+        value="<%= todo.todo %>"
+      />
+      <button type="submit">Cập nhật</button>
+    </form>
+  </body>
+</html>
