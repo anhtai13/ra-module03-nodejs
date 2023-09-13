@@ -1,10 +1,10 @@
-import getConnection from "../../config/connection.database.js";
 import moment from "moment";
+import getConnection from "./../../config/connection.database.js";
 
-const searchProducts = (params, callback) => {
+const searchOrderDetails = (params, callback) => {
     const connection = getConnection();
 
-    let sql = " FROM products";
+    let sql = " FROM order_details";
     const bindParams = [];
 
     const page = params.page || 1;
@@ -24,7 +24,9 @@ const searchProducts = (params, callback) => {
             callback(error, null);
         } else if (countResult[0].total !== 0) {
             const selectColumnsQuery =
-                "SELECT *" + sql + ` LIMIT ${limit} OFFSET ${offset}`;
+                "SELECT order_id, product_id, sku, name, unit_price, quantity, sub_total_price" +
+                sql +
+                ` LIMIT ${limit} OFFSET ${offset}`;
             connection.query(
                 selectColumnsQuery,
                 bindParams,
@@ -50,34 +52,11 @@ const searchProducts = (params, callback) => {
     });
 };
 
-const addProduct = (product, callback) => {
-    const connection = getConnection();
-
-    const productToCreate = {
-        ...product,
-        created_at: moment().format("YYYY-MM-DD HH:mm:ss"),
-        updated_at: moment().format("YYYY-MM-DD HH:mm:ss"),
-    };
-
-    connection.query(
-        "INSERT INTO products SET ?",
-        productToCreate,
-        (error, result) => {
-            if (error) {
-                callback(error, null);
-            } else {
-                callback(null, result);
-            }
-        }
-    );
-    connection.end();
-};
-
-const getDetailProduct = (id, callback) => {
+const getDetailOrder = (id, callback) => {
     const connection = getConnection();
 
     connection.query(
-        "SELECT * FROM products WHERE product_id = ?",
+        "SELECT * FROM order_details WHERE order_id = ?",
         [id],
         (error, result) => {
             if (error) {
@@ -87,46 +66,15 @@ const getDetailProduct = (id, callback) => {
             }
         }
     );
-    connection.end();
-};
-
-const updateProduct = (productId, params, callback) => {
-    const connection = getConnection();
-
-    let sql =
-        "UPDATE products SET name = ?, description = ?, category = ?, unit_price = ?, updated_by_id = ?";
-    let bindParams = [
-        params.name,
-        params.description,
-        params.category,
-        params.unit_price,
-        params.updated_by_id,
-    ];
-
-    if (params.image) {
-        sql += ", image = ?";
-        bindParams.push(params.image);
-    }
-
-    sql += " WHERE product_id = ?";
-    bindParams.push(productId);
-
-    connection.query(sql, bindParams, (error, result) => {
-        if (error) {
-            callback(error, null);
-        } else {
-            callback(null, result);
-        }
-    });
 
     connection.end();
 };
 
-const deleteProduct = (id, callback) => {
+const deleteOrderDetail = (id, callback) => {
     const connection = getConnection();
 
     connection.query(
-        "DELETE FROM products WHERE product_id = ?",
+        "DELETE FROM order_details WHERE order_detail_id = ?",
         [id],
         (error, result) => {
             if (error) {
@@ -136,13 +84,12 @@ const deleteProduct = (id, callback) => {
             }
         }
     );
+
     connection.end();
 };
 
 export default {
-    searchProducts,
-    addProduct,
-    updateProduct,
-    getDetailProduct,
-    deleteProduct,
+    searchOrderDetails,
+    getDetailOrder,
+    deleteOrderDetail,
 };

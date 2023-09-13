@@ -1,9 +1,9 @@
-import productService from "./../services/product.service.js";
+import contactService from "./../services/contact.service.js";
 
-const searchProducts = (request, response) => {
+const searchContacts = (request, response) => {
     const { name, page, limit } = request.query;
 
-    productService.searchProducts(
+    contactService.searchContacts(
         { name: name, page: page, limit: limit },
         (error, result) => {
             if (error) {
@@ -17,7 +17,7 @@ const searchProducts = (request, response) => {
     );
 };
 
-const addProduct = (request, response) => {
+const addContact = (request, response) => {
     if (request.auth.role !== 1) {
         response.status(403).send({
             error: "Không có quyền truy cập",
@@ -28,11 +28,10 @@ const addProduct = (request, response) => {
     const requestBody = request.body;
     const image = request.file;
 
-    productService.addProduct(
+    contactService.addContact(
         {
             ...requestBody,
-            authId: request.auth.product_id,
-            image: image,
+            authId: request.auth.id,
         },
         (error, result) => {
             if (error) {
@@ -44,7 +43,7 @@ const addProduct = (request, response) => {
     );
 };
 
-const getDetailProduct = (request, response) => {
+const getDetailContact = (request, response) => {
     if (request.auth.role !== 1) {
         response.status(403).send({
             error: "Không có quyền truy cập",
@@ -54,7 +53,7 @@ const getDetailProduct = (request, response) => {
 
     const { id } = request.params;
 
-    productService.getDetailProduct(id, (error, result) => {
+    contactService.getDetailContact(id, (error, result) => {
         if (error) {
             response.status(500).send({
                 error: error.message,
@@ -65,7 +64,7 @@ const getDetailProduct = (request, response) => {
     });
 };
 
-const updateProduct = (request, response) => {
+const updateContact = (request, response) => {
     if (request.auth.role !== 1) {
         response.status(403).send({
             error: "Không có quyền truy cập",
@@ -73,17 +72,14 @@ const updateProduct = (request, response) => {
         return;
     }
 
-    const productId = request.params.id;
+    const contactId = request.params.id;
 
     const requestBody = request.body;
 
-    const image = request.file;
-
-    productService.updateProduct(
-        productId,
+    contactService.updateContact(
+        contactId,
         {
             ...requestBody,
-            image: image,
         },
         (error, result) => {
             if (error) {
@@ -97,7 +93,7 @@ const updateProduct = (request, response) => {
     );
 };
 
-const deleteProduct = (request, response) => {
+const deleteContact = (request, response) => {
     if (request.auth.role !== 1) {
         response.status(403).send({
             error: "Không có quyền truy cập",
@@ -107,7 +103,7 @@ const deleteProduct = (request, response) => {
 
     const { id } = request.params;
 
-    productService.deleteProduct(id, (error, result) => {
+    contactService.deleteContact(id, (error, result) => {
         if (error) {
             response.status(500).send({
                 error: error.message,
@@ -119,9 +115,9 @@ const deleteProduct = (request, response) => {
 };
 
 export default {
-    searchProducts,
-    addProduct,
-    updateProduct,
-    getDetailProduct,
-    deleteProduct,
+    searchContacts,
+    addContact,
+    updateContact,
+    getDetailContact,
+    deleteContact,
 };

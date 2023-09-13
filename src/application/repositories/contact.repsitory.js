@@ -1,10 +1,10 @@
 import getConnection from "../../config/connection.database.js";
 import moment from "moment";
 
-const searchProducts = (params, callback) => {
+const searchContacts = (params, callback) => {
     const connection = getConnection();
 
-    let sql = " FROM products";
+    let sql = " FROM contacts";
     const bindParams = [];
 
     const page = params.page || 1;
@@ -12,10 +12,10 @@ const searchProducts = (params, callback) => {
 
     const offset = (page - 1) * limit;
 
-    if (params.name) {
-        const name = "%" + params.name + "%";
-        sql += " WHERE name LIKE ?";
-        bindParams.push(name);
+    if (params.full_name) {
+        const full_name = "%" + params.full_name + "%";
+        sql += " WHERE full_name LIKE ?";
+        bindParams.push(full_name);
     }
     const countQuery = "SELECT COUNT(1) AS total" + sql;
 
@@ -50,18 +50,18 @@ const searchProducts = (params, callback) => {
     });
 };
 
-const addProduct = (product, callback) => {
+const addContact = (contact, callback) => {
     const connection = getConnection();
 
-    const productToCreate = {
-        ...product,
+    const contactToCreate = {
+        ...contact,
         created_at: moment().format("YYYY-MM-DD HH:mm:ss"),
         updated_at: moment().format("YYYY-MM-DD HH:mm:ss"),
     };
 
     connection.query(
-        "INSERT INTO products SET ?",
-        productToCreate,
+        "INSERT INTO contacts SET ?",
+        contactToCreate,
         (error, result) => {
             if (error) {
                 callback(error, null);
@@ -73,11 +73,11 @@ const addProduct = (product, callback) => {
     connection.end();
 };
 
-const getDetailProduct = (id, callback) => {
+const getDetailContact = (id, callback) => {
     const connection = getConnection();
 
     connection.query(
-        "SELECT * FROM products WHERE product_id = ?",
+        "SELECT * FROM contacts WHERE contact_id = ?",
         [id],
         (error, result) => {
             if (error) {
@@ -90,17 +90,17 @@ const getDetailProduct = (id, callback) => {
     connection.end();
 };
 
-const updateProduct = (productId, params, callback) => {
+const updateContact = (contactId, params, callback) => {
     const connection = getConnection();
 
     let sql =
-        "UPDATE products SET name = ?, description = ?, category = ?, unit_price = ?, updated_by_id = ?";
+        "UPDATE contacts SET full_name = ?, email = ?, content = ?, status = ?, updated_id = ?";
     let bindParams = [
-        params.name,
-        params.description,
-        params.category,
-        params.unit_price,
-        params.updated_by_id,
+        params.full_name,
+        params.email,
+        params.content,
+        params.status,
+        params.updated_id,
     ];
 
     if (params.image) {
@@ -108,8 +108,8 @@ const updateProduct = (productId, params, callback) => {
         bindParams.push(params.image);
     }
 
-    sql += " WHERE product_id = ?";
-    bindParams.push(productId);
+    sql += " WHERE contact_id = ?";
+    bindParams.push(contactId);
 
     connection.query(sql, bindParams, (error, result) => {
         if (error) {
@@ -122,11 +122,11 @@ const updateProduct = (productId, params, callback) => {
     connection.end();
 };
 
-const deleteProduct = (id, callback) => {
+const deleteContact = (id, callback) => {
     const connection = getConnection();
 
     connection.query(
-        "DELETE FROM products WHERE product_id = ?",
+        "DELETE FROM contacts WHERE contact_id = ?",
         [id],
         (error, result) => {
             if (error) {
@@ -140,9 +140,9 @@ const deleteProduct = (id, callback) => {
 };
 
 export default {
-    searchProducts,
-    addProduct,
-    updateProduct,
-    getDetailProduct,
-    deleteProduct,
+    searchContacts,
+    addContact,
+    updateContact,
+    getDetailContact,
+    deleteContact,
 };

@@ -1,9 +1,9 @@
-import productService from "./../services/product.service.js";
+import orderService from "./../services/order.service.js";
 
-const searchProducts = (request, response) => {
+const searchOrders = (request, response) => {
     const { name, page, limit } = request.query;
 
-    productService.searchProducts(
+    orderService.searchOrders(
         { name: name, page: page, limit: limit },
         (error, result) => {
             if (error) {
@@ -17,8 +17,8 @@ const searchProducts = (request, response) => {
     );
 };
 
-const addProduct = (request, response) => {
-    if (request.auth.role !== 1) {
+const addOrder = (request, response) => {
+    if (request.auth.role !== 2) {
         response.status(403).send({
             error: "Không có quyền truy cập",
         });
@@ -26,13 +26,11 @@ const addProduct = (request, response) => {
     }
 
     const requestBody = request.body;
-    const image = request.file;
 
-    productService.addProduct(
+    orderService.addOrder(
         {
-            ...requestBody,
-            authId: request.auth.product_id,
-            image: image,
+            cart: requestBody.cart,
+            authId: request.auth.id,
         },
         (error, result) => {
             if (error) {
@@ -44,7 +42,7 @@ const addProduct = (request, response) => {
     );
 };
 
-const getDetailProduct = (request, response) => {
+const getDetailOrder = (request, response) => {
     if (request.auth.role !== 1) {
         response.status(403).send({
             error: "Không có quyền truy cập",
@@ -54,7 +52,7 @@ const getDetailProduct = (request, response) => {
 
     const { id } = request.params;
 
-    productService.getDetailProduct(id, (error, result) => {
+    orderService.getDetailOrder(id, (error, result) => {
         if (error) {
             response.status(500).send({
                 error: error.message,
@@ -65,39 +63,7 @@ const getDetailProduct = (request, response) => {
     });
 };
 
-const updateProduct = (request, response) => {
-    if (request.auth.role !== 1) {
-        response.status(403).send({
-            error: "Không có quyền truy cập",
-        });
-        return;
-    }
-
-    const productId = request.params.id;
-
-    const requestBody = request.body;
-
-    const image = request.file;
-
-    productService.updateProduct(
-        productId,
-        {
-            ...requestBody,
-            image: image,
-        },
-        (error, result) => {
-            if (error) {
-                response.status(500).send({
-                    error: error.message,
-                });
-            } else {
-                response.status(200).send();
-            }
-        }
-    );
-};
-
-const deleteProduct = (request, response) => {
+const getDetailOrderDetail = (request, response) => {
     if (request.auth.role !== 1) {
         response.status(403).send({
             error: "Không có quyền truy cập",
@@ -107,7 +73,57 @@ const deleteProduct = (request, response) => {
 
     const { id } = request.params;
 
-    productService.deleteProduct(id, (error, result) => {
+    orderService.getDetailOrderDetail(id, (error, result) => {
+        if (error) {
+            response.status(500).send({
+                error: error.message,
+            });
+        } else {
+            response.send(result);
+        }
+    });
+};
+
+const updateOrder = (request, response) => {
+    if (request.auth.role !== 1) {
+        response.status(403).send({
+            error: "Không có quyền truy cập",
+        });
+        return;
+    }
+
+    const ordertId = request.params.id;
+
+    const requestBody = request.body;
+
+    orderService.updateOrder(
+        ordertId,
+        {
+            ...requestBody,
+        },
+        (error, result) => {
+            if (error) {
+                response.status(500).send({
+                    error: error,
+                });
+            } else {
+                response.status(200).send();
+            }
+        }
+    );
+};
+
+const deleteOrder = (request, response) => {
+    if (request.auth.role !== 1) {
+        response.status(403).send({
+            error: "Không có quyền truy cập",
+        });
+        return;
+    }
+
+    const { id } = request.params;
+
+    orderService.deleteOrder(id, (error, result) => {
         if (error) {
             response.status(500).send({
                 error: error.message,
@@ -119,9 +135,10 @@ const deleteProduct = (request, response) => {
 };
 
 export default {
-    searchProducts,
-    addProduct,
-    updateProduct,
-    getDetailProduct,
-    deleteProduct,
+    searchOrders,
+    addOrder,
+    updateOrder,
+    getDetailOrder,
+    getDetailOrderDetail,
+    deleteOrder,
 };
